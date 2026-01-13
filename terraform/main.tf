@@ -26,8 +26,6 @@ resource "linode_instance" "hytale" {
   # Run setup script on first boot
   stackscript_id = linode_stackscript.hytale_setup.id
 
-  firewall_id = linode_firewall.hytale.id
-
   tags = ["hytale", "game-server"]
 }
 

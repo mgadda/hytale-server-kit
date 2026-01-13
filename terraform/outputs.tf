@@ -1,6 +1,10 @@
+locals {
+  server_ip = tolist(linode_instance.hytale.ipv4)[0]
+}
+
 output "server_ip" {
   description = "Public IP address of the Hytale server"
-  value       = linode_instance.hytale.ip_address
+  value       = local.server_ip
 }
 
 output "server_id" {
@@ -10,10 +14,10 @@ output "server_id" {
 
 output "connect_address" {
   description = "Address to connect from Hytale client"
-  value       = "${linode_instance.hytale.ip_address}:5520"
+  value       = "${local.server_ip}:5520"
 }
 
 output "ssh_command" {
   description = "SSH command to connect to the server"
-  value       = "ssh root@${linode_instance.hytale.ip_address}"
+  value       = "ssh root@${local.server_ip}"
 }

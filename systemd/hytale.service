@@ -1,0 +1,38 @@
+[Unit]
+Description=Hytale Game Server
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=hytale
+Group=hytale
+WorkingDirectory=/opt/hytale
+
+# Java options: 3GB heap (leaving 1GB for OS on 4GB instance)
+# Adjust -Xmx if you have a larger instance
+ExecStart=/usr/bin/java -Xmx3G -Xms1G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -jar HytaleServer.jar --assets Assets.zip
+
+# Restart configuration
+Restart=on-failure
+RestartSec=10
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/hytale
+PrivateTmp=true
+
+# Resource limits
+LimitNOFILE=65535
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=hytale
+
+[Install]
+WantedBy=multi-user.target

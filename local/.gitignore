@@ -1,0 +1,12 @@
+# Server binaries (copied from launcher)
+server/
+
+# User data (config, worlds, logs, mods)
+data/
+
+# Backups
+backups/
+
+# Downloader tool (if downloaded)
+hytale-downloader
+hytale-downloader.zip

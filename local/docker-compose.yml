@@ -1,0 +1,50 @@
+# Hytale Server - Local Development
+#
+# Usage:
+#   ./build.sh          # Copy server files from launcher
+#   docker compose up   # Start server (interactive, for first-time auth)
+#
+# Directory structure:
+#   ./server/  - Server binaries (HytaleServer.jar, Assets.zip) - from launcher
+#   ./data/    - User data (config, worlds, logs, mods) - persistent
+
+services:
+  hytale:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hytale-server:local
+    container_name: hytale-local
+
+    # Interactive mode for console access
+    stdin_open: true
+    tty: true
+
+    ports:
+      # QUIC uses UDP
+      - "5520:5520/udp"
+
+    volumes:
+      # Server binaries (read-only)
+      - ./server:/opt/hytale/server:ro
+      # User data (working directory)
+      - ./data:/opt/hytale
+      # Stable machine ID for encrypted credential storage
+      - ./data/machine-id:/etc/machine-id:ro
+
+    environment:
+      # JVM memory settings - adjust based on your available RAM
+      JAVA_OPTS: "-Xmx3G -Xms1G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200"
+      # Additional Hytale server options
+      # HYTALE_OPTS: "--disable-sentry"
+
+    # Restart policy for background mode
+    restart: unless-stopped
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "HytaleServer.jar"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s

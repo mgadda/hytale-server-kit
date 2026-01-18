@@ -1,13 +1,13 @@
 # Terraform
-terraform/.terraform/
-terraform/*.tfstate
-terraform/*.tfstate.*
+linode/terraform/.terraform/
+linode/terraform/*.tfstate
+linode/terraform/*.tfstate.*
 #terraform/.terraform.lock.hcl
-terraform/terraform.tfvars
-terraform/*.auto.tfvars
+linode/terraform/terraform.tfvars
+linode/terraform/*.auto.tfvars
 
 # Server files (too large for git)
-server-files/
+local/server/
 *.jar
 Assets.zip
 

@@ -49,7 +49,8 @@ cd local
 The simplest approach—uses files that auto-update when you play Hytale:
 
 ```bash
-./build.sh
+./build.sh           # Only copies changed files (checksum comparison)
+./build.sh --force   # Force copy all files
 ```
 
 The script copies from:
@@ -127,7 +128,7 @@ To run server commands (ban players, change settings, etc.):
 
 This attaches to the running container's stdin. Type commands directly.
 
-To detach without stopping: `Ctrl+P` then `Ctrl+Q`
+To detach without stopping: `Ctrl+]` (control + right bracket)
 
 To see available commands, type `/help` in the console.
 
@@ -190,16 +191,17 @@ World saves are stored in `data/universe/`. Each world has its own directory wit
 When Hytale releases an update:
 
 1. Launch the Hytale client (this updates your local files)
-2. Rebuild the Docker image:
+2. Run build to copy updated files:
    ```bash
    ./hytale.sh build
    ```
+   Only changed files are copied (checksum comparison).
 3. Restart the server:
    ```bash
    ./hytale.sh restart
    ```
 
-Your world data and configuration are preserved in `data/`.
+Your world data and configuration in `data/` are unaffected—only `server/` is updated.
 
 ## Backups
 
@@ -295,30 +297,43 @@ Common issues:
 To start fresh (removes all world data!):
 ```bash
 ./hytale.sh stop
-rm -rf data/
-./hytale.sh build
-./hytale.sh auth
+rm -rf data/           # Remove user data (worlds, config, auth)
+./hytale.sh build      # Regenerates data/ directory
+./hytale.sh auth       # Re-authenticate
+```
+
+To also reset server binaries:
+```bash
+rm -rf server/
+./hytale.sh build --force
 ```
 
 ## File Structure
 
 ```
 local/
-├── Dockerfile              # Container definition
+├── Dockerfile              # Container definition (minimal - just Java)
 ├── docker-compose.yml      # Service configuration
-├── build.sh               # Build image from game files
-├── hytale.sh              # Management script
-├── server/                # (generated) Server files for Docker build
-├── data/                  # (generated) Persistent data
-│   ├── universe/          # World saves
-│   ├── logs/              # Server logs
-│   ├── mods/              # Installed mods
+├── build.sh                # Copy server files from launcher
+├── hytale.sh               # Management script
+├── server/                 # (generated) Server binaries - read-only at runtime
+│   ├── HytaleServer.jar
+│   ├── HytaleServer.aot    # AOT cache for faster startup
+│   ├── Assets.zip
+│   └── Licenses/
+├── data/                   # (generated) User data - persistent across runs
 │   ├── config.json
 │   ├── permissions.json
 │   ├── whitelist.json
-│   └── bans.json
-└── backups/               # (generated) Manual backups
+│   ├── bans.json
+│   ├── machine-id          # Stable ID for credential encryption
+│   ├── universe/           # World saves
+│   ├── logs/               # Server logs
+│   └── mods/               # Installed mods
+└── backups/                # (generated) Manual backups
 ```
+
+Server binaries and user data are kept separate—binaries are mounted read-only, user data is read-write. This allows updating server files without touching your worlds and config.
 
 ## Installing Mods
 

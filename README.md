@@ -122,6 +122,4 @@ hytale_server/
         └── hytale.service
 ```
 
-## License
 
-This tooling is provided as-is for personal use. Hytale and related assets are property of Hypixel Studios.

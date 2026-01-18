@@ -1,27 +1,28 @@
-# Hytale Server Tooling
+# Hytale Server Kit
 
 Tools for running a Hytale dedicated server, either locally for development or on Linode for production.
 
 ## Overview
 
-| Environment | Use Case | Documentation |
-|-------------|----------|---------------|
-| [**Local**](local/) | Development, testing, LAN play | [local/README.md](local/README.md) |
+| Environment           | Use Case                           | Documentation                        |
+| --------------------- | ---------------------------------- | ------------------------------------ |
+| [**Local**](local/)   | Development, testing, LAN play     | [local/README.md](local/README.md)   |
 | [**Linode**](linode/) | Production hosting, public servers | [linode/README.md](linode/README.md) |
 
 ## Quick Comparison
 
-| Feature | Local (Docker) | Linode (Terraform) |
-|---------|----------------|-------------------|
-| Setup time | Minutes | ~10 minutes |
-| Cost | Free | ~$12/month |
-| Performance | Depends on your machine | Dedicated 4GB instance |
-| Internet access | Requires port forwarding | Public IP included |
-| Best for | Development, testing, LAN | Public servers, always-on |
+| Feature         | Local (Docker)            | Linode (Terraform)        |
+| --------------- | ------------------------- | ------------------------- |
+| Setup time      | Minutes                   | ~10 minutes               |
+| Cost            | Free                      | ~$12/month                |
+| Performance     | Depends on your machine   | Dedicated 4GB instance    |
+| Internet access | Requires port forwarding  | Public IP included        |
+| Best for        | Development, testing, LAN | Public servers, always-on |
 
 ## Prerequisites
 
 Both environments require:
+
 - **Hytale account** with server access
 - **Server files** — Either from your Hytale launcher installation or via [hytale-downloader](https://downloader.hytale.com/)
 
@@ -67,6 +68,7 @@ terraform apply
 ```
 
 Then deploy server files:
+
 ```bash
 cd linode/scripts
 ./deploy.sh <server-ip>

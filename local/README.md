@@ -30,17 +30,17 @@ cd local
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `./hytale.sh start` | Start server in background |
-| `./hytale.sh stop` | Stop server |
-| `./hytale.sh restart` | Restart server |
-| `./hytale.sh status` | Show server status |
-| `./hytale.sh logs` | Follow server logs (Ctrl+C to stop) |
-| `./hytale.sh console` | Attach to console for server commands |
-| `./hytale.sh auth` | Start interactively for authentication |
-| `./hytale.sh build` | Rebuild image from launcher files |
-| `./hytale.sh backup` | Backup universe data |
+| Command               | Description                            |
+| --------------------- | -------------------------------------- |
+| `./hytale.sh start`   | Start server in background             |
+| `./hytale.sh stop`    | Stop server                            |
+| `./hytale.sh restart` | Restart server                         |
+| `./hytale.sh status`  | Show server status                     |
+| `./hytale.sh logs`    | Follow server logs (Ctrl+C to stop)    |
+| `./hytale.sh console` | Attach to console for server commands  |
+| `./hytale.sh auth`    | Start interactively for authentication |
+| `./hytale.sh build`   | Rebuild image from launcher files      |
+| `./hytale.sh backup`  | Backup universe data                   |
 
 ## Building the Image
 
@@ -54,6 +54,7 @@ The simplest approach—uses files that auto-update when you play Hytale:
 ```
 
 The script copies from:
+
 ```
 ~/Library/Application Support/Hytale/install/release/package/game/latest/
 ├── Server/
@@ -63,6 +64,7 @@ The script copies from:
 ```
 
 Override the path with:
+
 ```bash
 HYTALE_LAUNCHER_PATH="/path/to/game/files" ./build.sh
 ```
@@ -88,16 +90,19 @@ unzip hytale-downloader.zip
 Hytale servers require authentication on first run. The auth flow uses OAuth device authorization:
 
 1. Start the server interactively:
+
    ```bash
    ./hytale.sh auth
    ```
 
 2. In the server console, type:
+
    ```
    /auth login device
    ```
 
 3. You'll see output like:
+
    ```
    ===================================================================
    DEVICE AUTHORIZATION
@@ -170,18 +175,19 @@ Run `java -jar HytaleServer.jar --help` for all options.
 
 Persistent configuration is stored in `data/`:
 
-| File | Purpose |
-|------|---------|
-| `config.json` | Server configuration |
+| File               | Purpose                           |
+| ------------------ | --------------------------------- |
+| `config.json`      | Server configuration              |
 | `permissions.json` | Permission groups and assignments |
-| `whitelist.json` | Whitelisted players |
-| `bans.json` | Banned players |
+| `whitelist.json`   | Whitelisted players               |
+| `bans.json`        | Banned players                    |
 
 These files are read on startup. Changes made via in-game commands will be saved automatically.
 
 ### World Data
 
 World saves are stored in `data/universe/`. Each world has its own directory with:
+
 - Chunk data
 - Player data
 - World-specific `config.json`
@@ -212,6 +218,7 @@ Your world data and configuration in `data/` are unaffected—only `server/` is 
 ```
 
 Creates a timestamped archive in `backups/`:
+
 ```
 backups/universe_20260117_143022.tar.gz
 ```
@@ -221,6 +228,7 @@ The server is briefly stopped during backup to ensure consistency.
 ### Automatic Backups
 
 Enable in `docker-compose.yml`:
+
 ```yaml
 environment:
   HYTALE_OPTS: "--backup --backup-frequency 30"
@@ -244,6 +252,7 @@ The server uses **QUIC over UDP** (not TCP). Port 5520/udp is exposed by default
 ### Local Play
 
 Connect from the Hytale client on the same machine:
+
 ```
 localhost:5520
 ```
@@ -251,6 +260,7 @@ localhost:5520
 ### LAN Play
 
 Other machines on your network can connect using your local IP:
+
 ```
 192.168.x.x:5520
 ```
@@ -260,6 +270,7 @@ Find your IP with: `ipconfig getifaddr en0`
 ### Internet Play
 
 To allow connections from the internet:
+
 1. Forward UDP port 5520 on your router to your machine
 2. Share your public IP (or use a dynamic DNS service)
 
@@ -270,11 +281,13 @@ Note: For serious hosting, consider using the `linode/` deployment instead.
 ### Server won't start
 
 Check logs for errors:
+
 ```bash
 docker compose logs
 ```
 
 Common issues:
+
 - **Out of memory**: Reduce `-Xmx` in `JAVA_OPTS`
 - **Port in use**: Change port via `--bind` or stop conflicting service
 - **Auth expired**: Re-run `./hytale.sh auth`
@@ -295,6 +308,7 @@ Common issues:
 ### Reset everything
 
 To start fresh (removes all world data!):
+
 ```bash
 ./hytale.sh stop
 rm -rf data/           # Remove user data (worlds, config, auth)
@@ -303,6 +317,7 @@ rm -rf data/           # Remove user data (worlds, config, auth)
 ```
 
 To also reset server binaries:
+
 ```bash
 rm -rf server/
 ./hytale.sh build --force

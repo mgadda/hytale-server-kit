@@ -19,6 +19,7 @@ cp terraform.tfvars.example terraform.tfvars
 ```
 
 Edit `terraform.tfvars`:
+
 ```hcl
 linode_token   = "your-linode-api-token"
 ssh_public_key = "ssh-ed25519 AAAA... your-key"
@@ -49,6 +50,7 @@ cd ../scripts
 ```
 
 Or manually specify the files location:
+
 ```bash
 ./deploy.sh <server-ip> /path/to/server/files
 ```
@@ -63,11 +65,13 @@ sudo -u hytale java -jar /opt/hytale/HytaleServer.jar --assets /opt/hytale/Asset
 ```
 
 In the console:
+
 ```
 /auth login device
 ```
 
 Visit https://accounts.hytale.com/device and enter the code. Then:
+
 ```
 /auth persistence set Encrypted
 ```
@@ -87,11 +91,11 @@ Connect from Hytale client: `<server-ip>:5520`
 
 ### Resources Created
 
-| Resource | Description |
-|----------|-------------|
-| `linode_instance` | Ubuntu 24.04, 4GB RAM (g6-standard-1) |
-| `linode_firewall` | UDP 5520 (Hytale), TCP 22 (SSH) |
-| `linode_stackscript` | Automated server setup |
+| Resource             | Description                           |
+| -------------------- | ------------------------------------- |
+| `linode_instance`    | Ubuntu 24.04, 4GB RAM (g6-standard-1) |
+| `linode_firewall`    | UDP 5520 (Hytale), TCP 22 (SSH)       |
+| `linode_stackscript` | Automated server setup                |
 
 ### Estimated Cost
 
@@ -101,14 +105,14 @@ Connect from Hytale client: `<server-ip>:5520`
 
 Available Linode regions (set via `region` variable):
 
-| Region | Location |
-|--------|----------|
-| `us-west` | Los Angeles (default) |
-| `us-central` | Dallas |
-| `us-east` | Newark |
-| `eu-west` | London |
-| `eu-central` | Frankfurt |
-| `ap-south` | Singapore |
+| Region       | Location              |
+| ------------ | --------------------- |
+| `us-west`    | Los Angeles (default) |
+| `us-central` | Dallas                |
+| `us-east`    | Newark                |
+| `eu-west`    | London                |
+| `eu-central` | Frankfurt             |
+| `ap-south`   | Singapore             |
 
 See [Linode regions](https://www.linode.com/docs/products/platform/get-started/guides/choose-a-data-center/) for full list.
 
@@ -146,14 +150,14 @@ sudo systemctl start hytale
 
 ### File Locations
 
-| Path | Contents |
-|------|----------|
-| `/opt/hytale/` | Server installation |
-| `/opt/hytale/HytaleServer.jar` | Server binary |
-| `/opt/hytale/Assets.zip` | Game assets |
-| `/opt/hytale/config.json` | Server configuration |
-| `/opt/hytale/universe/` | World data |
-| `/opt/hytale/logs/` | Server logs |
+| Path                           | Contents             |
+| ------------------------------ | -------------------- |
+| `/opt/hytale/`                 | Server installation  |
+| `/opt/hytale/HytaleServer.jar` | Server binary        |
+| `/opt/hytale/Assets.zip`       | Game assets          |
+| `/opt/hytale/config.json`      | Server configuration |
+| `/opt/hytale/universe/`        | World data           |
+| `/opt/hytale/logs/`            | Server logs          |
 
 ### Configuration
 
@@ -198,6 +202,7 @@ The Terraform config creates a firewall with:
 - **All outbound** — Allowed
 
 To update the SSH IP restriction, edit `firewall.tf`:
+
 ```hcl
 inbound {
   label    = "ssh"
@@ -215,6 +220,7 @@ Then: `terraform apply`
 ### Linode Backups
 
 Enable via Linode Cloud Manager or add to `main.tf`:
+
 ```hcl
 resource "linode_instance" "hytale" {
   # ... existing config ...
@@ -232,6 +238,7 @@ systemctl start hytale
 ```
 
 Download:
+
 ```bash
 scp root@<server-ip>:/root/universe_backup_*.tar.gz ./
 ```
@@ -252,11 +259,13 @@ This permanently deletes the server and all data.
 ### Server won't start
 
 Check logs:
+
 ```bash
 sudo journalctl -u hytale -n 50
 ```
 
 Common issues:
+
 - **Java not found**: Re-run setup script
 - **Out of memory**: Upgrade Linode instance type
 - **Auth expired**: Re-authenticate interactively
@@ -271,6 +280,7 @@ Common issues:
 ### SSH access denied
 
 Verify your IP is allowed in `firewall.tf` and re-apply:
+
 ```bash
 terraform apply
 ```

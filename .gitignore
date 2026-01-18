@@ -14,3 +14,28 @@ Assets.zip
 # OS files
 .DS_Store
 *.un~
+
+# Terraform
+linode/terraform/.terraform/
+linode/terraform/*.tfstate
+linode/terraform/*.tfstate.*
+#terraform/.terraform.lock.hcl
+linode/terraform/terraform.tfvars
+linode/terraform/*.auto.tfvars
+
+# Server files (too large for git)
+local/server/
+*.jar
+Assets.zip
+
+# OS files
+.DS_Store
+*.un~
+
+server_manual.md
+
+backups
+local/data/
+local/server/
+linode/terraform/terraform.tfvars
+server_manual.md
